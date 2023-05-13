@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div style="width: 600px; margin: 0 auto; background: #fff">
+    <h2>WebSocket Demo</h2>
+    <p id="app">未连接</p>
+<button onclick="connect()">连接WebSocket</button>
+<button onclick="closeWs()">停止连接</button>
+</div>
+</body>
+</html>
+
+
+<script>
+    let socket;
+    function connect() {
+        socket = new WebSocket('ws://127.0.0.1:8000/ws/some_url/');
+        socket.onmessage = function (event) {
+            let data = JSON.parse(event.data);
+            console.log(data);
+            let originalText = document.querySelector('#app').innerHTML;
+            if(originalText === '未连接') {
+                originalText = '';
+            }
+            originalText = originalText.replace('\n', '<br>')
+            document.querySelector('#app').innerHTML = originalText + data.message;
+        }
+    }
+
+
+    function closeWs() {
+        socket.close();
+    }
+
+
+</script>
